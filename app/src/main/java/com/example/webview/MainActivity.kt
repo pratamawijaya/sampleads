@@ -11,6 +11,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -31,6 +32,7 @@ class MainActivity : AppCompatActivity() {
         val adsText = findViewById<EditText>(R.id.adsText)
         val btnLoad = findViewById<Button>(R.id.btnLoad)
         val adsweb = findViewById<WebView>(R.id.adsweb)
+        val tvError = findViewById<TextView>(R.id.tvError)
 
         adsweb.apply {
             settings.apply {
@@ -39,37 +41,16 @@ class MainActivity : AppCompatActivity() {
             }
             isVerticalScrollBarEnabled = false
             isHorizontalScrollBarEnabled = false
-            webChromeClient = object : WebChromeClient(){
+            webChromeClient = object : WebChromeClient() {
                 override fun onConsoleMessage(consoleMessage: ConsoleMessage?): Boolean {
                     Log.e("WebView", consoleMessage?.message() ?: "")
+                    tvError.text = consoleMessage?.message() ?: ""
                     return super.onConsoleMessage(consoleMessage)
                 }
             }
-//            webViewClient = object : WebViewClient() {
-//                override fun shouldOverrideUrlLoading(
-//                    view: WebView?,
-//                    request: WebResourceRequest?
-//                ): Boolean {
-//
-//                    val urlToOpen = request?.url.toString()
-//
-//                    if (urlToOpen.isNotEmpty() && (urlToOpen.startsWith("http://") || urlToOpen.startsWith(
-//                            "https://"
-//                        ))
-//                    ) {
-//                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(urlToOpen))
-//                        try {
-//                            context.startActivity(intent)
-//                        } catch (e: Exception) {
-//                        }
-//                    } else {
-//                    }
-//                    return true // Indicate that we've handled the URL
-//                }
-//            }
 
             btnLoad.setOnClickListener {
-                adsweb.loadData(adsText.text.toString(),"text/html; charset=UTF-8;", "UTF-8")
+                adsweb.loadData(adsText.text.toString(), "text/html; charset=UTF-8;", "UTF-8")
             }
 
 
